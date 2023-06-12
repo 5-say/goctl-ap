@@ -1,0 +1,13 @@
+# https://docs.docker.com/compose/compose-file/05-services/
+services:
+  node:
+    image: node:20
+    user: node
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/home/node/app
+    expose:
+      - "8081"
+    command: "npm start"
