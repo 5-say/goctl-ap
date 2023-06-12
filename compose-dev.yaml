@@ -1,5 +1,6 @@
 # https://docs.docker.com/compose/compose-file/05-services/
 services:
+
   node:
     image: node:20
     user: node
