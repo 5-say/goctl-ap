@@ -1,14 +1,13 @@
-version: "2"
 # https://docs.docker.com/compose/compose-file/05-services/
 services:
 
-  node:
-    image: "node:20"
-    user: "node"
-    working_dir: /app
-    environment:
-      - NODE_ENV=production
+  app:
+    entrypoint:
+    - sleep
+    - infinity
+    image: node:20
+    init: true
     volumes:
-      - ./vite-project:/app
-    expose:
-      - "8081"
+    - type: bind
+      source: /var/run/docker.sock
+      target: /var/run/docker.sock
