@@ -1,7 +1,7 @@
 # https://docs.docker.com/compose/compose-file/05-services/
 services:
 
-  app:
+  client:
     entrypoint:
     - sleep
     - infinity
@@ -11,3 +11,16 @@ services:
     - type: bind
       source: /var/run/docker.sock
       target: /var/run/docker.sock
+    working_dir: dev/client
+
+  manage:
+    entrypoint:
+    - sleep
+    - infinity
+    image: node:20
+    init: true
+    volumes:
+    - type: bind
+      source: /var/run/docker.sock
+      target: /var/run/docker.sock
+    working_dir: dev/manage
