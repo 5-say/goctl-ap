@@ -1,0 +1,108 @@
+info(
+    description: "账户"
+)
+
+@server (
+    group: admin/public/account
+    prefix: /admin/public
+)
+
+
+service api {
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 登录
+    @doc(
+        summary: 获取登录图形验证码
+    )
+    @handler getSignInCaptcha
+    get /sign-in/captcha(Admin_Public_GetSignInCaptcha_Request) returns (Admin_Public_GetSignInCaptcha_Response)
+
+    @doc(
+        summary: 校验登录图形验证码
+    )
+    @handler checkSignInCaptcha
+    post /sign-in/check-captcha(Admin_Public_CheckSignInCaptcha_Request) returns (Admin_Public_CheckSignInCaptcha_Response)
+
+    @doc(
+        summary: 账号登录
+    )
+    @handler signInAccount
+    post /sign-in/account(Admin_Public_SignInAccount_Request) returns (Admin_Public_SignInAccount_Response)
+
+    @doc(
+        summary: 手机登录
+    )
+    @handler signInMobile
+    post /sign-in/mobile(Admin_Public_SignInMobile_Request) returns (Admin_Public_SignInMobile_Response)
+
+    @doc(
+        summary: 发送登录短信验证码
+    )
+    @handler sendSignInSMS
+    patch /sign-in/send-sms(Admin_Public_SendSignInSMS_Request) returns (Admin_Public_SendSignInSMS_Response)
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 获取登录图形验证码
+// - 请求
+type (
+    Admin_Public_GetSignInCaptcha_Request {}
+)
+// - 响应
+type (
+    Admin_Public_GetSignInCaptcha_Response {}
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 校验登录图形验证码
+// - 请求
+type (
+    Admin_Public_CheckSignInCaptcha_Request {}
+)
+// - 响应
+type (
+    Admin_Public_CheckSignInCaptcha_Response {}
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 账号登录
+// - 请求
+type (
+    Admin_Public_SignInAccount_Request {
+        Account      string `json:"account"`      // 账号
+        Password     string `json:"password"`     // 密码（前端加密后提交）
+        CaptchaCode *string `json:"captcha_code"` // 图形验证码
+    }
+)
+// - 响应
+type (
+    Admin_Public_SignInAccount_Response {
+        Token string `json:"token"`
+    }
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 手机登录
+// - 请求
+type (
+    Admin_Public_SignInMobile_Request {
+        CountryCode  string `json:"country_code"` // 国际区号
+        Mobile       string `json:"mobile"`       // 手机号码
+        SMSCode      string `json:"sms_code"`     // 短信验证码
+    }
+)
+// - 响应
+type (
+    Admin_Public_SignInMobile_Response {
+        Token string `json:"token"`
+    }
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 发送登录短信验证码
+// - 请求
+type (
+    Admin_Public_SendSignInSMS_Request {
+        SendSMS_Request
+    }
+)
+// - 响应
+type (
+    Admin_Public_SendSignInSMS_Response {
+        SendSMS_Response
+    }
+)

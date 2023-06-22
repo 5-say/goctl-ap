@@ -1,0 +1,46 @@
+import (
+	// 通用结构体定义
+	"common.api"
+
+	// 管理后台开放接口
+	"admin/public/account.api"
+
+	// 客户端开放接口
+	"user/public/account.api"
+
+	// 客户端登录接口
+	"user/self/account.api"
+	"user/self/food.api"
+)
+
+@server (
+	group: api
+	swtags: ...
+)
+
+service api {
+	@handler nothing
+	get /
+
+	@doc(
+		summary: "错误响应实例"
+	)
+	@handler demoError
+	post /demo/error(DemoError_Request) returns (DemoError_Response)
+
+	@doc(
+		summary: "文档"
+		description: "获取 swagger 文档 json 文件"
+	)
+	@handler swaggerDoc
+	get /doc/swagger
+}
+
+type (
+	DemoError_Request {
+		SystemStatusCode int    `json:"system_status_code"`
+		HTTPStatusCode   int    `json:"http_status_code"`
+		Message          string `json:"message"`
+	}
+	DemoError_Response struct{}
+)

@@ -193,7 +193,8 @@ func writeProperty(writer io.Writer, member spec.Member, indent int) error {
 
 func writeIndent(writer io.Writer, indent int) {
 	for i := 0; i < indent; i++ {
-		fmt.Fprint(writer, "\t")
+		// fmt.Fprint(writer, "\t")
+		fmt.Fprint(writer, "  ")
 	}
 }
 

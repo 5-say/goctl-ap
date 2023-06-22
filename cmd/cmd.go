@@ -42,7 +42,7 @@ func rootRun(cmd *cobra.Command, args []string) {
 	}
 
 	// 构造请求包
-	if err := genRequest(p.Dir); err != nil {
+	if err := genRequester(p.Dir); err != nil {
 		panic(err)
 	}
 	if err := genComponents(p.Dir, p.Api); err != nil {

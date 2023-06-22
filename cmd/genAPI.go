@@ -14,9 +14,8 @@ import (
 )
 
 const (
-	pathTagKey   = "path"
-	pathPrefix   = "pathPrefix"
-	headerTagKey = "header"
+	pathTagKey = "path"
+	pathPrefix = "prefix"
 )
 
 //go:embed tpl/api.tpl
@@ -36,8 +35,9 @@ func genAPI(dir string, api *spec.ApiSpec) error {
 	}
 	defer fp.Close()
 
-	imports := ""
-	imports += `import { instance as api } from "./apiRequest"`
+	imports := `import { instance as http } from "./apiRequester"` + pathx.NL +
+		`import { AxiosRequestConfig } from "axios"` + pathx.NL +
+		`import qs from "qs"`
 
 	if len(api.Types) != 0 {
 		if len(imports) > 0 {
@@ -48,7 +48,7 @@ func genAPI(dir string, api *spec.ApiSpec) error {
 		imports += fmt.Sprintf(`%sexport * from "%s"`, pathx.NL, "./"+outputFile)
 	}
 
-	apis, err := genAPIs(api, "api")
+	apis, err := genAPIs(api, "http")
 	if err != nil {
 		return err
 	}
@@ -100,28 +100,21 @@ func genAPIs(api *spec.ApiSpec, caller string) (string, error) {
 
 func paramsForRoute(route spec.Route) string {
 	if route.RequestType == nil {
-		return ""
+		return "config?: AxiosRequestConfig"
 	}
-	hasParams := pathHasParams(route)
-	hasBody := hasRequestBody(route)
-	hasHeader := hasRequestHeader(route)
-	hasPath := hasRequestPath(route)
 	rt, err := goTypeToTs(route.RequestType, true)
 	if err != nil {
 		fmt.Println(err.Error())
 		return ""
 	}
 	var params []string
-	if hasParams {
-		params = append(params, fmt.Sprintf("params: %s", rt+"Params"))
+	if hasRequestForm(route) {
+		params = append(params, fmt.Sprintf("query: %sParams", rt))
 	}
-	if hasBody {
+	if hasRequestBody(route) {
 		params = append(params, fmt.Sprintf("req: %s", rt))
 	}
-	if hasHeader {
-		params = append(params, fmt.Sprintf("headers: %s", rt+"Headers"))
-	}
-	if hasPath {
+	if hasRequestPath(route) {
 		ds, ok := route.RequestType.(spec.DefineStruct)
 		if !ok {
 			fmt.Printf("invalid route.RequestType: {%v}\n", route.RequestType)
@@ -140,6 +133,9 @@ func paramsForRoute(route spec.Route) string {
 			}
 		}
 	}
+
+	params = append(params, "config?: AxiosRequestConfig")
+
 	return strings.Join(params, ", ")
 }
 
@@ -148,37 +144,29 @@ func commentForRoute(route spec.Route) string {
 	comment := route.JoinedDoc()
 	builder.WriteString("/**")
 	builder.WriteString("\n * @description " + comment)
-	hasParams := pathHasParams(route)
-	hasBody := hasRequestBody(route)
-	hasHeader := hasRequestHeader(route)
-	if hasParams {
-		builder.WriteString("\n * @param params")
+
+	if hasRequestForm(route) {
+		builder.WriteString("\n * @param query")
 	}
-	if hasBody {
+	if hasRequestBody(route) {
 		builder.WriteString("\n * @param req")
 	}
-	if hasHeader {
-		builder.WriteString("\n * @param headers")
-	}
+
 	builder.WriteString("\n */")
 	return builder.String()
 }
 
 func callParamsForRoute(route spec.Route, group spec.Group) string {
-	hasParams := pathHasParams(route)
-	hasBody := hasRequestBody(route)
-	hasHeader := hasRequestHeader(route)
-
 	var params = []string{pathForRoute(route, group)}
-	if hasParams {
-		params = append(params, "params")
+
+	if hasRequestForm(route) {
+		params[0] += " + `?` + qs.stringify(query)"
 	}
-	if hasBody {
+	if hasRequestBody(route) {
 		params = append(params, "req")
 	}
-	if hasHeader {
-		params = append(params, "headers")
-	}
+
+	params = append(params, "config")
 
 	return strings.Join(params, ", ")
 }
@@ -205,16 +193,11 @@ func pathForRoute(route spec.Route, group spec.Group) string {
 	return fmt.Sprintf("`%s/%s`", prefix, strings.TrimPrefix(routePath, "/"))
 }
 
-func pathHasParams(route spec.Route) bool {
-	ds, ok := route.RequestType.(spec.DefineStruct)
-	if !ok {
+func hasRequestBody(route spec.Route) bool {
+	if len(strings.Split(",post,put,patch,", route.Method)) == 1 {
 		return false
 	}
 
-	return len(ds.Members) != len(ds.GetBodyMembers())
-}
-
-func hasRequestBody(route spec.Route) bool {
 	ds, ok := route.RequestType.(spec.DefineStruct)
 	if !ok {
 		return false
@@ -232,44 +215,11 @@ func hasRequestPath(route spec.Route) bool {
 	return len(route.RequestTypeName()) > 0 && len(ds.GetTagMembers(pathTagKey)) > 0
 }
 
-func hasRequestHeader(route spec.Route) bool {
-	return false
-	// ds, ok := route.RequestType.(spec.DefineStruct)
-	// if !ok {
-	// 	return false
-	// }
+func hasRequestForm(route spec.Route) bool {
+	ds, ok := route.RequestType.(spec.DefineStruct)
+	if !ok {
+		return false
+	}
 
-	// // fmt.Println(route.RequestTypeName(), ds.GetTagMembers(headerTagKey))
-
-	// if route.RequestTypeName() == "Admin_Public_SendSignInSMS_Request" {
-	// 	fmt.Printf("%#v\n", ds.Members[0].Type.Members[0].Tag)
-	// 	// for _, v := range ds.Members {
-	// 	// 	fmt.Println(v.Type)
-	// 	// }
-	// }
-
-	// return len(route.RequestTypeName()) > 0 && len(ds.GetTagMembers(headerTagKey)) > 0
+	return len(route.RequestTypeName()) > 0 && len(ds.GetFormMembers()) > 0
 }
-
-// spec.Member{
-// 	Name:"",
-// 	Type:spec.DefineStruct{
-// 		RawName:"SendSMS_Request",
-// 		Members:[]spec.Member{
-// 			spec.Member{
-// 				Name:"CountryCode", Type:spec.PrimitiveType{RawName:"string"}, Tag:"`json:\"country_code\"`", Comment:"// 国际区号", Docs:spec.Doc(nil), IsInline:false
-// 			},
-// 			spec.Member{
-// 				Name:"Mobile", Type:spec.PrimitiveType{RawName:"string"}, Tag:"`json:\"mobile\"`", Comment:"// 手机号码", Docs:spec.Doc(nil), IsInline:false
-// 			},
-// 			spec.Member{
-// 				Name:"CaptchaCode", Type:spec.PointerType{RawName:"*string", Type:spec.PrimitiveType{RawName:"string"}}, Tag:"`json:\"captcha_code\"`", Comment:"// 图形验证码", Docs:spec.Doc(nil), IsInline:false
-// 			}
-// 		},
-// 		Docs:spec.Doc(nil)
-// 	},
-// 	Tag:"",
-// 	Comment:"",
-// 	Docs:spec.Doc(nil),
-// 	IsInline:true
-// }

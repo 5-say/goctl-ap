@@ -1,22 +1,14 @@
 
-run:api-plugin-ts
+run:test
 
-help:
-	@echo ""
-	@echo "------------------------------------------"
-	@echo "make i   | make init   : 初始化工作区"
-	@echo "------------------------------------------"
-	@echo ""
+i:
+	@goctl api ts -api example/define/api/api.api -dir example/src/ts
 
 init:
 	sh shell/install-vscode-extension.sh
 	cd dev && git clone git@github.com:5-say/web-client-demo.git client && code client
 	cd dev && git clone git@github.com:5-say/web-manage-demo.git client && code manage
 
-ts:api-ts
-api-ts:
-	go run . ts --api ../../define/api/api.api --dir ts
-
-api-plugin-ts:
+test:
 	@go build .
-	@goctl api plugin -p ./goctl-ts -api ../../define/api/api.api -dir ts
+	@goctl api plugin -p ./goctl-ts -api example/define/api/api.api -dir example/src/api
