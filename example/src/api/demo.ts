@@ -3,8 +3,8 @@
 import { instance as http } from "./apiRequester"
 import { AxiosRequestConfig } from "axios"
 import qs from "qs"
-import * as components from "./apiComponents"
-export * from "./apiComponents"
+import * as components from "./demoComponents"
+export * from "./demoComponents"
 
 /**
  * @description 

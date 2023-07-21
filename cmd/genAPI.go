@@ -22,7 +22,7 @@ const (
 var apiTemplate string
 
 func genAPI(dir string, api *spec.ApiSpec) error {
-	filename := "api.ts"
+	filename := strings.Replace(api.Service.Name, "-api", "", 1) + ".ts"
 	if err := pathx.RemoveIfExist(path.Join(dir, filename)); err != nil {
 		return err
 	}

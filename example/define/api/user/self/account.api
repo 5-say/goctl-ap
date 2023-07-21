@@ -9,7 +9,7 @@ info(
     middleware: RefreshTokenMiddleware
 )
 
-service api {
+service demo-api {
     @doc(
         summary: 安全退出
     )

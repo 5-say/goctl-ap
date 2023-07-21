@@ -18,7 +18,7 @@ import (
 	swtags: ...
 )
 
-service api {
+service demo-api {
 	@handler nothing
 	get /
 

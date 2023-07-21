@@ -7,7 +7,7 @@ info(
     prefix: /user/public
 )
 
-service api {
+service demo-api {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 注册
     @doc(
         summary: 获取注册图形验证码

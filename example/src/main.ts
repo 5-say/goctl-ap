@@ -1,15 +1,15 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-import { instance as http } from "./api/apiRequester"
-import * as api from './api/api'
+import { instance as demoRequester } from "./api/apiRequester"
+import * as demo from './api/demo'
 
 // 默认配置
-http.defaults.baseURL = 'http://localhost:8888'
-http.defaults.timeout = 3000
+demoRequester.defaults.baseURL = 'http://localhost:8888'
+demoRequester.defaults.timeout = 3000
 
 // 添加请求拦截器
-http.interceptors.request.use(function (config) {
+demoRequester.interceptors.request.use(function (config) {
   config.headers.Authorization = 'localstorge'
   return config;
 }, function (error) {
@@ -17,7 +17,7 @@ http.interceptors.request.use(function (config) {
 });
 
 // 添加响应拦截器
-http.interceptors.response.use(function (response) {
+demoRequester.interceptors.response.use(function (response) {
   // 2xx 范围内的状态码都会触发该函数。
   // 更新 newtoken
   return response.data.data;
@@ -28,7 +28,7 @@ http.interceptors.response.use(function (response) {
   return Promise.reject(error);
 });
 
-api.admin_public_signInAccount({
+demo.admin_public_signInAccount({
   account: "string",     // 账号
   password: "string",    // 密码（前端加密后提交）
   captcha_code: "string" // 图形验证码
@@ -38,7 +38,7 @@ api.admin_public_signInAccount({
   console.log(response)
 })
 
-api.user_self_foodList({
+demo.user_self_foodList({
   page: 1,                   // 当前页码
   per_page: 10,              // 每页条目
   order_column: "string",    // 排序字段
@@ -47,7 +47,7 @@ api.user_self_foodList({
   search_status_eq: "fully"  // 状态 fully.库存充足 needBuy.需要采购
 })
 
-api.user_self_foodDelete({
+demo.user_self_foodDelete({
   ids: [1,2,6],      // 食材 ID
   password: "string" // 账户密码
 })

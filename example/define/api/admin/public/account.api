@@ -8,7 +8,7 @@ info(
 )
 
 
-service api {
+service demo-api {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 登录
     @doc(
         summary: 获取登录图形验证码

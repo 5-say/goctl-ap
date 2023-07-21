@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/zeromicro/go-zero/tools/goctl/plugin"
+	"github.com/zeromicro/go-zero/tools/goctl/util/pathx"
 )
 
 // Execute ..
@@ -41,8 +42,11 @@ func rootRun(cmd *cobra.Command, args []string) {
 		panic(err)
 	}
 
+	// 自动创建输出目录
+	pathx.MkdirIfNotExist(p.Dir)
+
 	// 构造请求包
-	if err := genRequester(p.Dir); err != nil {
+	if err := genRequester(p.Dir, p.Api); err != nil {
 		panic(err)
 	}
 	if err := genComponents(p.Dir, p.Api); err != nil {
