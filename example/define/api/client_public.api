@@ -1,0 +1,204 @@
+info(
+    description: "客户端 - 用户开放接口"
+)
+
+@server (
+    group: client/public
+    prefix: client/public
+)
+
+service user {
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 注册
+    @doc(
+        summary: 获取注册图形验证码
+    )
+    @handler getSignUpCaptcha
+    get /sign-up/captcha(Client_Public_GetSignUpCaptcha_Request) returns (Client_Public_GetSignUpCaptcha_Response)
+
+    @doc(
+        summary: 校验注册图形验证码
+    )
+    @handler checkSignUpCaptcha
+    patch /sign-up/check-captcha(Client_Public_CheckSignUpCaptcha_Request) returns (Client_Public_CheckSignUpCaptcha_Response)
+
+    @doc(
+        summary: 账号注册
+    )
+    @handler signUpAccount
+    post /sign-up/account(Client_Public_SignUpAccount_Request) returns (Client_Public_SignUpAccount_Response)
+
+    @doc(
+        summary: 手机注册
+    )
+    @handler signUpMobile
+    post /sign-up/mobile(Client_Public_SignUpMobile_Request) returns (Client_Public_SignUpMobile_Response)
+
+    @doc(
+        summary: 发送注册短信验证码
+    )
+    @handler sendSignUpSMS
+    patch /sign-up/send-sms(Client_Public_SendSignUpSMS_Request) returns (Client_Public_SendSignUpSMS_Response)
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 登录
+    @doc(
+        summary: 获取登录图形验证码
+    )
+    @handler getSignInCaptcha
+    get /sign-in/captcha(Client_Public_GetSignInCaptcha_Request) returns (Client_Public_GetSignInCaptcha_Response)
+
+    @doc(
+        summary: 校验登录图形验证码
+    )
+    @handler checkSignInCaptcha
+    post /sign-in/check-captcha(Client_Public_CheckSignInCaptcha_Request) returns (Client_Public_CheckSignInCaptcha_Response)
+
+    @doc(
+        summary: 账号登录
+    )
+    @handler signInAccount
+    post /sign-in/account(Client_Public_SignInAccount_Request) returns (Client_Public_SignInAccount_Response)
+
+    @doc(
+        summary: 手机登录
+    )
+    @handler signInMobile
+    post /sign-in/mobile(Client_Public_SignInMobile_Request) returns (Client_Public_SignInMobile_Response)
+
+    @doc(
+        summary: 发送登录短信验证码
+    )
+    @handler sendSignInSMS
+    patch /sign-in/send-sms(Client_Public_SendSignInSMS_Request) returns (Client_Public_SendSignInSMS_Response)
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 获取注册图形验证码
+// - 请求
+type (
+    Client_Public_GetSignUpCaptcha_Request {}
+)
+// - 响应
+type (
+    Client_Public_GetSignUpCaptcha_Response {}
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 校验注册图形验证码
+// - 请求
+type (
+    Client_Public_CheckSignUpCaptcha_Request {}
+)
+// - 响应
+type (
+    Client_Public_CheckSignUpCaptcha_Response {}
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 账号注册
+// - 请求
+type (
+    Client_Public_SignUpAccount_Request {
+        Account      string `json:"account"`      // 账号
+        Password     string `json:"password"`     // 密码（前端加密后提交）
+        CaptchaCode *string `json:"captcha_code"` // 图形验证码
+    }
+)
+// - 响应
+type (
+    Client_Public_SignUpAccount_Response {
+        Token string `json:"token"`
+    }
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 手机注册
+// - 请求
+type (
+    Client_Public_SignUpMobile_Request {
+        CountryCode  string `json:"country_code"` // 国际区号
+        Mobile       string `json:"mobile"`       // 手机号码
+        SMSCode      string `json:"sms_code"`     // 短信验证码
+    }
+)
+// - 响应
+type (
+    Client_Public_SignUpMobile_Response {
+        Token string `json:"token"`
+    }
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 发送注册短信验证码
+// - 请求
+type (
+    Client_Public_SendSignUpSMS_Request {
+        SendSMS_Request
+    }
+)
+// - 响应
+type (
+    Client_Public_SendSignUpSMS_Response {
+        SendSMS_Response
+    }
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 获取登录图形验证码
+// - 请求
+type (
+    Client_Public_GetSignInCaptcha_Request {}
+)
+// - 响应
+type (
+    Client_Public_GetSignInCaptcha_Response {}
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 校验登录图形验证码
+// - 请求
+type (
+    Client_Public_CheckSignInCaptcha_Request {}
+)
+// - 响应
+type (
+    Client_Public_CheckSignInCaptcha_Response {}
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 账号登录
+// - 请求
+type (
+    Client_Public_SignInAccount_Request {
+        Account      string `json:"account"`      // 账号
+        Password     string `json:"password"`     // 密码（前端加密后提交）
+        CaptchaCode *string `json:"captcha_code"` // 图形验证码
+    }
+)
+// - 响应
+type (
+    Client_Public_SignInAccount_Response {
+        Token string `json:"token"`
+    }
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 手机登录
+// - 请求
+type (
+    Client_Public_SignInMobile_Request {
+        CountryCode  string `json:"country_code"` // 国际区号
+        Mobile       string `json:"mobile"`       // 手机号码
+        SMSCode      string `json:"sms_code"`     // 短信验证码
+    }
+)
+// - 响应
+type (
+    Client_Public_SignInMobile_Response {
+        Token string `json:"token"`
+    }
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 发送登录短信验证码
+// - 请求
+type (
+    Client_Public_SendSignInSMS_Request {
+        SendSMS_Request
+    }
+)
+// - 响应
+type (
+    Client_Public_SendSignInSMS_Response {
+        SendSMS_Response
+    }
+)

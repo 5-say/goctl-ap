@@ -1,0 +1,33 @@
+import(
+	"../client_public.api"
+	"../client_user.api"
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 获取列表
+// - 请求
+type (
+	GetList_Request {
+		Page        *int    `form:"page,optional"`         // 当前页码
+		PerPage     *int    `form:"per_page,optional"`     // 每页条目
+		OrderColumn *string `form:"order_column,optional"` // 排序字段
+		OrderType   *string `form:"order_type,optional"`   // 排序类型，asc、desc
+	}
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 发送短信验证码
+// - 请求
+type (
+	SendSMS_Request {
+		CountryCode string  `json:"country_code"` // 国际区号
+		Mobile      string  `json:"mobile"`       // 手机号码
+		CaptchaCode *string `json:"captcha_code"` // 图形验证码
+	}
+)
+// - 响应
+type (
+	SendSMS_Response {
+		ExpTimestamp     string `json:"exp_timestamp"`     // 短信验证码有效期时间戳
+		RemainingRetries string `json:"remaining_retries"` // 输入错误剩余重试次数
+	}
+)
+

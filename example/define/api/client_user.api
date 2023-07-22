@@ -1,0 +1,47 @@
+info(
+    description: "客户端 - 用户登录接口"
+)
+
+@server (
+    group: client/user
+    prefix: client/user
+    jwt: Auth
+    middleware: RefreshTokenMiddleware
+)
+
+service user {
+    @doc(
+        summary: 安全退出
+    )
+    @handler signOut
+    post /sign-out(Client_User_SignOut_Request) returns (Client_User_SignOut_Response)
+
+    @doc(
+        summary: 修改密码
+    )
+    @handler editPassword
+    put /password(Client_User_EditPassword_Request) returns (Client_User_EditPassword_Response)
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 安全退出
+// - 请求
+type (
+    Client_User_SignOut_Request {}
+)
+// - 响应
+type (
+    Client_User_SignOut_Response {}
+)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 修改密码
+// - 请求
+type (
+    Client_User_EditPassword_Request {
+        OriginalPassword string `json:"original_password"` // 原始密码（前端加密后提交）
+        NewPassword      string `json:"new_password"`      // 新的密码（前端加密后提交）
+    }
+)
+// - 响应
+type (
+    Client_User_EditPassword_Response {}
+)

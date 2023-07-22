@@ -1,0 +1,48 @@
+info(
+	description: "管理端 - 管理员登录接口"
+)
+
+@server (
+	group: manager/admin
+	prefix: manager/admin
+	jwt: Auth
+	middleware: RefreshTokenMiddleware
+)
+
+service user {
+	@doc(
+		summary: 获取用户列表
+	)
+	@handler getUserList
+	get /users(Request) returns (AdminSelfGetUserListResponse)
+
+	@doc(
+		summary: 获取用户详情
+	)
+	@handler getUserInfo
+	get /users/:id(Request) returns (Response)
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 安全退出
+// - 请求
+type (
+	Request struct{}
+)
+// - 响应
+type (
+	Response struct{}
+)
+
+type AdminSelfGetUserListResponse {
+	List []AdminSelfGetUserListItem `json:"list"`
+}
+
+type AdminSelfGetUserListItem {
+	ID           uint32 `json:"id"`
+	Name         string `json:"name"`
+	Account      string `json:"account"`
+	Password     string `json:"password"`
+	LastSigninAt uint32 `json:"last_signin_at"`
+	CreatedAt    uint32 `json:"created_at"`
+	UpdatedAt    uint32 `json:"updated_at"`
+}

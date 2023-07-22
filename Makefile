@@ -1,14 +1,10 @@
 
-run:test
+run:test-swagger
 
-i:
-	@goctl api ts -api example/define/api/api.api -dir example/src/ts
-
-init:
-	sh shell/install-vscode-extension.sh
-	cd dev && git clone git@github.com:5-say/web-client-demo.git client && code client
-	cd dev && git clone git@github.com:5-say/web-manage-demo.git client && code manage
-
-test:
+test-ts:
 	@go build .
-	@goctl api plugin -p ./goctl-ts -api example/define/api/api.api -dir example/src/api
+	@goctl api plugin -p ./goctl-ts="ts" --api example/define/api/platform/client.api  --dir example/ts/api
+
+test-swagger:
+	@go build .
+	@goctl api plugin -p ./goctl-ts="swagger" --api example/define/api/platform/api.api --dir example/swagger
