@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/5-say/goctl-ts/cmd/swagger"
-	"github.com/5-say/goctl-ts/cmd/ts"
+	"github.com/5-say/goctl-ap/cmd/swagger"
+	"github.com/5-say/goctl-ap/cmd/ts"
 
 	"github.com/spf13/cobra"
 )

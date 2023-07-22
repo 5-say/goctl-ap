@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/5-say/goctl-ts/cmd"
+	"github.com/5-say/goctl-ap/cmd"
 )
 
 func main() {

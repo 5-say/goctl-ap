@@ -1,4 +1,4 @@
-module github.com/5-say/goctl-ts
+module github.com/5-say/goctl-ap
 
 go 1.20
 
