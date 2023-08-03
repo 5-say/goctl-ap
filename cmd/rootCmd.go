@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/5-say/goctl-ap/cmd/service"
 	"github.com/5-say/goctl-ap/cmd/swagger"
 	"github.com/5-say/goctl-ap/cmd/ts"
 
@@ -31,13 +32,14 @@ func init() {
 
 	rootCmd.AddCommand(ts.Cmd)
 	rootCmd.AddCommand(swagger.Cmd)
+	rootCmd.AddCommand(service.Cmd)
 }
 
-func rootRun(cmd *cobra.Command, args []string) {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Print("Error: ", err)
-		}
-	}()
+// func rootRun(cmd *cobra.Command, args []string) {
+// 	defer func() {
+// 		if err := recover(); err != nil {
+// 			fmt.Print("Error: ", err)
+// 		}
+// 	}()
 
-}
+// }

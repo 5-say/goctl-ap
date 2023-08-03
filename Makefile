@@ -1,5 +1,5 @@
 
-run:test-swagger
+run:test-service
 
 test-ts:
 	@go build .
@@ -8,3 +8,6 @@ test-ts:
 test-swagger:
 	@go build .
 	@goctl api plugin -p ./goctl-ap="swagger -f swagger.json" --api example/define/api/platform/api.api --dir example/swagger
+
+test-service:
+	@go run . service -a example/service/app -d example/service/define
