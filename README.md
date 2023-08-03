@@ -16,6 +16,12 @@ docker dev create -o --name goctl-ap git@github.com:5-say/goctl-ap.git
 go install github.com/5-say/goctl-ap@latest
 ```
 
+> 生成 服务 的 初始化文件
+
+```sh
+goctl-ap service --app app --define define
+```
+
 > 生成前端 TypeScript 接口文件
 
 ```sh
