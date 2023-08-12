@@ -35,8 +35,7 @@ func genAPI(dir string, api *spec.ApiSpec) error {
 	}
 	defer fp.Close()
 
-	imports := `import { instance as http } from "./apiRequester"` + pathx.NL +
-		`import { AxiosRequestConfig } from "axios"` + pathx.NL +
+	imports := `import axios, { AxiosRequestConfig } from "axios"` + pathx.NL +
 		`import qs from "qs"`
 
 	if len(api.Types) != 0 {

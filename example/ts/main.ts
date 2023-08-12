@@ -1,15 +1,14 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-import { instance as userRequester } from "./api/apiRequester"
 import * as user from './api/user'
 
 // 默认配置
-userRequester.defaults.baseURL = 'http://localhost:8888'
-userRequester.defaults.timeout = 3000
+user.http.defaults.baseURL = 'http://localhost:8888'
+user.http.defaults.timeout = 3000
 
 // 添加请求拦截器
-userRequester.interceptors.request.use(function (config) {
+user.http.interceptors.request.use(function (config) {
   config.headers.Authorization = 'localstorge'
   return config;
 }, function (error) {
@@ -17,7 +16,7 @@ userRequester.interceptors.request.use(function (config) {
 });
 
 // 添加响应拦截器
-userRequester.interceptors.response.use(function (response) {
+user.http.interceptors.response.use(function (response) {
   // 2xx 范围内的状态码都会触发该函数。
   // 更新 newtoken
   return response.data.data;

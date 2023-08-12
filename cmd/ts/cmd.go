@@ -31,9 +31,6 @@ var Cmd = &cobra.Command{
 		pathx.MkdirIfNotExist(p.Dir)
 
 		// 构造请求包
-		if err := genRequester(p.Dir, p.Api); err != nil {
-			panic(err)
-		}
 		if err := genComponents(p.Dir, p.Api); err != nil {
 			panic(err)
 		}
